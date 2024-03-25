@@ -27,4 +27,4 @@ jobs:
         context: .
         file: ./.devcontainer/Dockerfile
         push: true
-        tags: wankunde/gluten:latest
+        tags: wankunde/gluten-dev:latest
