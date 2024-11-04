@@ -107,11 +107,37 @@ case class InsertIntoHadoopFsRelationCommand(
     }
 
     val jobId = java.util.UUID.randomUUID().toString
-    val committer = FileCommitProtocol.instantiate(
-      sparkSession.sessionState.conf.fileCommitProtocolClass,
-      jobId = jobId,
-      outputPath = outputPath.toString,
-      dynamicPartitionOverwrite = dynamicPartitionOverwrite)
+
+    var committer: FileCommitProtocol = null
+    try {
+      val method = classOf[FileCommitProtocol].getMethod(
+        "instantiate",
+        classOf[String],
+        classOf[String],
+        classOf[String],
+        classOf[Boolean])
+      committer = method.invoke(
+        sparkSession.sessionState.conf.fileCommitProtocolClass,
+        jobId,
+        outputPath.toString,
+        dynamicPartitionOverwrite).asInstanceOf[FileCommitProtocol]
+    } catch {
+      case _: Throwable =>
+        val method = classOf[FileCommitProtocol].getMethod(
+          "instantiate",
+          classOf[String],
+          classOf[String],
+          classOf[String],
+          classOf[Boolean],
+          classOf[org.apache.hadoop.conf.Configuration])
+        committer = method.invoke(
+          sparkSession.sessionState.conf.fileCommitProtocolClass,
+          jobId,
+          outputPath.toString,
+          dynamicPartitionOverwrite,
+          sparkSession.sparkContext.hadoopConfiguration).asInstanceOf[FileCommitProtocol]
+    }
+
 
     val doInsertion = if (mode == SaveMode.Append) {
       true
