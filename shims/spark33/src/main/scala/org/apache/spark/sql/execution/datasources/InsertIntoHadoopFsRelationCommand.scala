@@ -122,7 +122,7 @@ case class InsertIntoHadoopFsRelationCommand(
           sparkSession.sessionState.conf.fileCommitProtocolClass,
           jobId,
           outputPath.toString,
-          dynamicPartitionOverwrite)
+          Boolean.box(dynamicPartitionOverwrite))
         .asInstanceOf[FileCommitProtocol]
     } catch {
       case _: Throwable =>
@@ -139,7 +139,7 @@ case class InsertIntoHadoopFsRelationCommand(
             sparkSession.sessionState.conf.fileCommitProtocolClass,
             jobId,
             outputPath.toString,
-            dynamicPartitionOverwrite,
+            Boolean.box(dynamicPartitionOverwrite),
             sparkSession.sparkContext.hadoopConfiguration
           )
           .asInstanceOf[FileCommitProtocol]
