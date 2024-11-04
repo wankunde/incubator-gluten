@@ -118,6 +118,7 @@ case class InsertIntoHadoopFsRelationCommand(
         classOf[Boolean])
       committer = method
         .invoke(
+          null,
           sparkSession.sessionState.conf.fileCommitProtocolClass,
           jobId,
           outputPath.toString,
@@ -134,6 +135,7 @@ case class InsertIntoHadoopFsRelationCommand(
           classOf[org.apache.hadoop.conf.Configuration])
         committer = method
           .invoke(
+            null,
             sparkSession.sessionState.conf.fileCommitProtocolClass,
             jobId,
             outputPath.toString,
