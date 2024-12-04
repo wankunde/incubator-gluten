@@ -23,6 +23,7 @@ import org.apache.gluten.utils.PlanUtil
 import org.apache.spark.sql.AnalysisException
 import org.apache.spark.sql.catalyst.expressions.{Expression, PlanExpression}
 import org.apache.spark.sql.catalyst.plans.QueryPlan
+import org.apache.spark.sql.catalyst.trees.TreeNodeTag
 import org.apache.spark.sql.execution.GlutenFallbackReporter.FALLBACK_REASON_TAG
 import org.apache.spark.sql.execution.adaptive.{AdaptiveSparkPlanExec, AdaptiveSparkPlanHelper, AQEShuffleReadExec, QueryStageExec}
 import org.apache.spark.sql.execution.columnar.InMemoryTableScanExec
@@ -43,11 +44,13 @@ import scala.collection.mutable.{ArrayBuffer, BitSet}
 object GlutenExplainUtils extends AdaptiveSparkPlanHelper {
   type FallbackInfo = (Int, Map[String, String])
 
+  val GLUTEN_OP_ID_TAG = TreeNodeTag[Int]("operatorId")
+
   def addFallbackNodeWithReason(
       p: SparkPlan,
       reason: String,
       fallbackNodeToReason: mutable.HashMap[String, String]): Unit = {
-    p.getTagValue(QueryPlan.OP_ID_TAG).foreach {
+    p.getTagValue(GLUTEN_OP_ID_TAG).foreach {
       opId =>
         // e.g., 002 project, it is used to help analysis by `substring(4)`
         val formattedNodeName = f"$opId%03d ${p.nodeName}"
@@ -284,7 +287,7 @@ object GlutenExplainUtils extends AdaptiveSparkPlanHelper {
       }
       visited.add(plan)
       currentOperationID += 1
-      plan.setTagValue(QueryPlan.OP_ID_TAG, currentOperationID)
+      plan.setTagValue(GLUTEN_OP_ID_TAG, currentOperationID)
     }
 
     plan.foreachUp {
@@ -354,12 +357,12 @@ object GlutenExplainUtils extends AdaptiveSparkPlanHelper {
    * value.
    */
   private def getOpId(plan: QueryPlan[_]): String = {
-    plan.getTagValue(QueryPlan.OP_ID_TAG).map(v => s"$v").getOrElse("unknown")
+    plan.getTagValue(GLUTEN_OP_ID_TAG).map(v => s"$v").getOrElse("unknown")
   }
 
   private def removeTags(plan: QueryPlan[_]): Unit = {
     def remove(p: QueryPlan[_], children: Seq[QueryPlan[_]]): Unit = {
-      p.unsetTagValue(QueryPlan.OP_ID_TAG)
+      p.unsetTagValue(GLUTEN_OP_ID_TAG)
       children.foreach(removeTags)
     }
 
