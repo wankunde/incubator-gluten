@@ -193,8 +193,39 @@ public class CelebornShuffleManager implements ShuffleManager {
     // is the same SparkContext among different shuffleIds.
     // This method may be called many times.
     if (dependency instanceof ColumnarShuffleDependency) {
-      if (fallbackPolicyRunner.applyAllFallbackPolicy(
-          lifecycleManager, dependency.partitioner().numPartitions())) {
+      Boolean shouldFallback = false;
+      try {
+        try {
+          Method applyAllFallbackPolicyMethod =
+              CelebornShuffleFallbackPolicyRunner.class
+                  .getDeclaredMethod(
+                      "applyAllFallbackPolicy",
+                      LifecycleManager.class,
+                      int.class,
+                      int.class);
+          shouldFallback =
+              (Boolean) applyAllFallbackPolicyMethod.invoke(
+                  fallbackPolicyRunner,
+                  lifecycleManager,
+                  dependency.partitioner().numPartitions(),
+                  dependency.rdd().getNumPartitions());
+        } catch (NoSuchMethodException e) {
+          Method applyAllFallbackPolicyMethod =
+              CelebornShuffleFallbackPolicyRunner.class
+                  .getDeclaredMethod(
+                      "applyAllFallbackPolicy",
+                      LifecycleManager.class,
+                      int.class);
+          shouldFallback =
+              (Boolean) applyAllFallbackPolicyMethod.invoke(
+                  fallbackPolicyRunner,
+                  lifecycleManager,
+                  dependency.partitioner().numPartitions());
+        }
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+      if (shouldFallback) {
         if (GlutenConfig.getConf().enableCelebornFallback()) {
           logger.warn("Fallback to ColumnarShuffleManager!");
           columnarShuffleIds.add(shuffleId);
