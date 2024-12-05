@@ -197,30 +197,25 @@ public class CelebornShuffleManager implements ShuffleManager {
       try {
         try {
           Method applyAllFallbackPolicyMethod =
-              CelebornShuffleFallbackPolicyRunner.class
-                  .getDeclaredMethod(
-                      "applyAllFallbackPolicy",
-                      LifecycleManager.class,
-                      int.class,
-                      int.class);
+              CelebornShuffleFallbackPolicyRunner.class.getDeclaredMethod(
+                  "applyAllFallbackPolicy", LifecycleManager.class, int.class, int.class);
           shouldFallback =
-              (Boolean) applyAllFallbackPolicyMethod.invoke(
-                  fallbackPolicyRunner,
-                  lifecycleManager,
-                  dependency.partitioner().numPartitions(),
-                  dependency.rdd().getNumPartitions());
+              (Boolean)
+                  applyAllFallbackPolicyMethod.invoke(
+                      fallbackPolicyRunner,
+                      lifecycleManager,
+                      dependency.partitioner().numPartitions(),
+                      dependency.rdd().getNumPartitions());
         } catch (NoSuchMethodException e) {
           Method applyAllFallbackPolicyMethod =
-              CelebornShuffleFallbackPolicyRunner.class
-                  .getDeclaredMethod(
-                      "applyAllFallbackPolicy",
-                      LifecycleManager.class,
-                      int.class);
+              CelebornShuffleFallbackPolicyRunner.class.getDeclaredMethod(
+                  "applyAllFallbackPolicy", LifecycleManager.class, int.class);
           shouldFallback =
-              (Boolean) applyAllFallbackPolicyMethod.invoke(
-                  fallbackPolicyRunner,
-                  lifecycleManager,
-                  dependency.partitioner().numPartitions());
+              (Boolean)
+                  applyAllFallbackPolicyMethod.invoke(
+                      fallbackPolicyRunner,
+                      lifecycleManager,
+                      dependency.partitioner().numPartitions());
         }
       } catch (Exception e) {
         throw new RuntimeException(e);
