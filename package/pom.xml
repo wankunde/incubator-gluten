@@ -55,6 +55,9 @@
   <profiles>
     <profile>
       <id>backends-velox</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <dependencies>
         <dependency>
           <groupId>org.apache.gluten</groupId>

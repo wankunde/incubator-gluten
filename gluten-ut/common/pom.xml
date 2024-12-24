@@ -15,6 +15,10 @@
   <name>Gluten Unit Test Common</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+    </dependency>
   <dependency>
     <groupId>org.apache.gluten</groupId>
     <artifactId>spark-sql-columnar-shims-common</artifactId>

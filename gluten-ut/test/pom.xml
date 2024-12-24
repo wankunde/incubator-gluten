@@ -16,6 +16,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.gluten</groupId>
       <artifactId>gluten-ut-common</artifactId>
       <version>${project.version}</version>
@@ -87,7 +91,7 @@
     <profile>
       <id>backends-velox</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <dependencies>
         <dependency>
