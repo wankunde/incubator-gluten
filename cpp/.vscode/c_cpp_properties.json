@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/_build/release/core/proto",
+                "/home/kunwan/ws/apache/incubator-gluten/ep/build-velox/build/velox_ep",
+                "/home/kunwan/ws/apache/incubator-gluten/ep/build-velox/build/velox_ep/_build/release",
+                "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg/vcpkg_installed/x64-linux-avx/include",
+                "/opt/tiger/jdk/byteopenjdk-17.0.9/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}
