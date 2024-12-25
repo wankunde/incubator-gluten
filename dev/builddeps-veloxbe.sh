@@ -29,7 +29,7 @@ VELOX_REPO=""
 VELOX_BRANCH=""
 VELOX_HOME=""
 VELOX_PARAMETER=""
-BUILD_ARROW=ON
+BUILD_ARROW=OFF
 SPARK_VERSION=ALL
 
 # set default number of threads as cpu cores minus 2

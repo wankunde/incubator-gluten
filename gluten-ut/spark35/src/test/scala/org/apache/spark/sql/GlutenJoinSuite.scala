@@ -16,6 +16,8 @@
  */
 package org.apache.spark.sql
 
+import org.apache.spark.SparkConf
+
 class GlutenJoinSuite extends JoinSuite with GlutenSQLTestsTrait {
 
   override def testNameBlackList: Seq[String] = Seq(
@@ -42,6 +44,14 @@ class GlutenJoinSuite extends JoinSuite with GlutenSQLTestsTrait {
     "NaN and -0.0 in join keys"
   )
 
+  override def sparkConf: SparkConf = {
+    val conf = super.sparkConf
+      .set("spark.ui.enabled", "true")
+      .set("spark.gluten.saveDir", "/tmp/saveDir")
+      .set("spark.gluten.sql.benchmark_task.taskId", "10")
+    conf
+  }
+
   test("test case sensitive for BHJ") {
     spark.sql("create table t_bhj(a int, b int, C int) using parquet")
     spark.sql("insert overwrite t_bhj select id as a, (id+1) as b, (id+2) as c from range(3)")
@@ -53,5 +63,7 @@ class GlutenJoinSuite extends JoinSuite with GlutenSQLTestsTrait {
         |order by t0.a, t0.b
         |""".stripMargin
     checkAnswer(spark.sql(sql), Seq(Row(0, 1), Row(1, 2), Row(2, 3)))
+
+//    Thread.sleep(10000000L)
   }
 }

@@ -193,7 +193,7 @@ function check_commit {
     fi
   else
     # Branch-new build requires all untracked files to be deleted. We only need the source code.
-    sudo git clean -dffx :/
+    git clean -dffx :/
   fi
 
   if [ -f ${VELOX_HOME}/velox-build.cache ]; then
