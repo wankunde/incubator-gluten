@@ -16,8 +16,8 @@
 
 set -exu
 
-VELOX_REPO=https://github.com/wankunde/velox.git
-VELOX_BRANCH=smj_debug
+VELOX_REPO=git@github.com:wankunde/velox.git
+VELOX_BRANCH=smj_debug2
 VELOX_HOME=""
 
 OS=`uname -s`
