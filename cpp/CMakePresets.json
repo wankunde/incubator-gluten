@@ -1,79 +1,49 @@
 {
-  "version": 2,
+  "version": 3,
   "configurePresets": [
+    {
+      "name": "Base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/_build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": " -std=gnu++17 -Wno-missing-field-initializers -Wno-error=stringop-overread -Wno-error=stringop-overflow",
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "TREAT_WARNINGS_AS_ERRORS": "1",
+        "ENABLE_ALL_WARNINGS": "1",
+        "BUILD_TESTS": "OFF",
+        "BUILD_EXAMPLES": "ON",
+        "ENABLE_JEMALLOC_STATS": "OFF",
+        "BUILD_VELOX_BACKEND": "ON",
+        "VELOX_HOME": "/home/kunwan/ws/apache/incubator-gluten/ep/build-velox/build/velox_ep",
+        "BUILD_BENCHMARKS": "OFF",
+        "ENABLE_HDFS": "ON"
+      },
+      "environment": {
+        "GLOG_v": "1",
+        "GLOG_logtostderr": "1",
+        "GLUTEN_VCPKG": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg",
+        "VCPKG_ROOT": "$env{GLUTEN_VCPKG}/.vcpkg",
+        "CMAKE_TOOLCHAIN_FILE": "$env{GLUTEN_VCPKG}/toolchain.cmake",
+        "VCPKG_MANIFEST_DIR": "$env{GLUTEN_VCPKG}",
+        "VCPKG_TRIPLET": "x64-linux-avx",
+        "PKG_CONFIG_PATH": "$env{VCPKG_MANIFEST_DIR}/vcpkg_installed/x64-linux-avx/lib/pkgconfig:$env{VCPKG_MANIFEST_DIR}/vcpkg_installed/x64-linux-avx/share/pkgconfig"
+      }
+    },
     {
       "name": "Debug",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/debug",
+      "inherits": "Base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_STANDARD": "17",
-        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/_install",
-        "CMAKE_TOOLCHAIN_FILE": "$env{GLUTEN_VCPKG}/toolchain.cmake",
-        "VCPKG_TARGET_TRIPLET": "x64-linux-avx",
-        "VCPKG_TRIPLET": "x64-linux-avx",
-        "VCPKG_MANIFEST_DIR": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg",
-
-        "BUILD_TESTS": "OFF",
-        "BUILD_EXAMPLES": "OFF",
-        "BUILD_JEMALLOC": "OFF",
-        "BUILD_VELOX_BACKEND": "ON",
-        "VELOX_HOME": "/home/kunwan/ws/apache/incubator-gluten/cpp/../ep/build-velox/build/velox_ep",
-        "BUILD_BENCHMARKS": "OFF",
-        "BUILD_PROTOBUF": "OFF",
-        "ENABLE_QAT": "OFF",
-        "ENABLE_HBM": "OFF",
-        "ENABLE_GCS": "OFF",
-        "ENABLE_S3": "OFF",
-        "ENABLE_HDFS": "ON",
-        "ENABLE_ABFS": "OFF"
-      },
-      "environment": {
-        "JAVA_HOME": "/usr/lib/jvm/zulu-17-amd64",
-        "JAVA_INCLUDE_PATH": "/usr/lib/jvm/zulu-17-amd64/include",
-        "GLUTEN_VCPKG": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg",
-        "VCPKG_ROOT": "$env{GLUTEN_VCPKG}/.vcpkg",
-        "VCPKG_MANIFEST_DIR": "$env{GLUTEN_VCPKG}",
-        "PKG_CONFIG_PATH": "$env{GLUTEN_VCPKG}/vcpkg_installed/x64-linux-avx/lib/pkgconfig:$env{GLUTEN_VCPKG}/vcpkg_installed/x64-linux-avx/share/pkgconfig",
-        "PATH": "$env{GLUTEN_VCPKG}/vcpkg_installed/x64-linux-avx/tools/protobuf:$penv{PATH}"
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
       "name": "Release",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/release",
+      "inherits": "Base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_TOOLCHAIN_FILE": "$env{GLUTEN_VCPKG}/toolchain.cmake",
-        "VCPKG_TARGET_TRIPLET": "x64-linux-avx",
-        "VCPKG_TRIPLET": "x64-linux-avx",
-        "VCPKG_MANIFEST_DIR": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg",
-
-        "BUILD_TESTS": "OFF",
-        "BUILD_EXAMPLES": "OFF",
-        "BUILD_JEMALLOC": "OFF",
-        "BUILD_VELOX_BACKEND": "ON",
-        "VELOX_HOME": "/home/kunwan/ws/apache/incubator-gluten/cpp/../ep/build-velox/build/velox_ep",
-        "BUILD_BENCHMARKS": "OFF",
-        "BUILD_PROTOBUF": "OFF",
-        "ENABLE_QAT": "OFF",
-        "ENABLE_HBM": "OFF",
-        "ENABLE_GCS": "OFF",
-        "ENABLE_S3": "OFF",
-        "ENABLE_HDFS": "ON",
-        "ENABLE_ABFS": "OFF"
-      },
-      "environment": {
-        "JAVA_HOME": "/usr/lib/jvm/zulu-17-amd64",
-        "JAVA_INCLUDE_PATH": "/usr/lib/jvm/zulu-17-amd64/include",
-        "GLUTEN_VCPKG": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg",
-	"CMAKE_TOOLCHAIN_FILE": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg/toolchain.cmake",
-	"VCPKG_TRIPLET_INSTALL_DIR": "/home/kunwan/ws/apache/incubator-gluten/dev/vcpkg/vcpkg_installed/x64-linux-avx",
-        "VCPKG_ROOT": "$env{GLUTEN_VCPKG}/.vcpkg",
-        "VCPKG_MANIFEST_DIR": "$env{GLUTEN_VCPKG}",
-        "PKG_CONFIG_PATH": "$env{GLUTEN_VCPKG}/vcpkg_installed/x64-linux-avx/lib/pkgconfig:$env{GLUTEN_VCPKG}/vcpkg_installed/x64-linux-avx/share/pkgconfig",
-        "PATH": "$env{GLUTEN_VCPKG}/vcpkg_installed/x64-linux-avx/tools/protobuf:$penv{PATH}"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     }
   ],
